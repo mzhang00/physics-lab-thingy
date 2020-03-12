@@ -19,22 +19,22 @@ df['X'] = df['X'].cat.codes
 # Make the plot
 fig = plt.figure()
 ax = fig.gca(projection='3d')
-ax.set_xlabel("X coordinate (cm)")
-ax.set_ylabel("Y coordinate (cm)")
+ax.set_xlabel("X-coordinate (cm)")
+ax.set_ylabel("Y-coordinate (cm)")
 ax.set_zlabel("Voltage (V)")
-ax.set_title("Electric Potential Scalar Field")
-ax.plot_trisurf(df['Y'], df['X'], df['Z'], cmap=plt.cm.plasma, linewidth=0.2)
+ax.set_title("Electric Potential Field")
+ax.plot_trisurf(df['Y'], df['X'], df['Z'], cmap=plt.cm.winter, linewidth=0.2)
 # plt.show()
 
 # to Add a color bar which maps values to colors.
 surf = ax.plot_trisurf(df['Y'], df['X'], df['Z'],
-                       cmap=plt.cm.plasma, linewidth=0.2)
+                       cmap=plt.cm.winter, linewidth=0.2)
 fig.colorbar(surf, shrink=0.5, aspect=5)
 plt.show()
 
 
 # Rotate it
-ax.view_init(30, 45)
+ax.view_init(45, 45)
 plt.show()
 
 # Other palette
