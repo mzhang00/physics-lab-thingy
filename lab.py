@@ -1,18 +1,42 @@
-import plotly.graph_objects as go
+# library
+from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.pyplot as plt
 import pandas as pd
+import seaborn as sns
 
-z_data = pd.read_csv('e_field.csv')
+# Get the data (csv file is hosted on the web)
+url = 'e_field.csv'
+data = pd.read_csv(url)
 
-fig = go.Figure(data=[go.Surface(
-    z=z_data.values
-)]
-)
+# Transform it to a long format
+df = data.unstack().reset_index()
+df.columns = ["X", "Y", "Z"]
 
-fig.update_traces(contours_z=dict(show=True, usecolormap=True,
-                                  highlightcolor="limegreen", project_z=True))
-fig.update_layout(title='Equipotentials', autosize=False,
-                  scene_camera_eye=dict(x=1.87, y=0.88, z=-0.64),
-                  width=500, height=500,
-                  margin=dict(l=65, r=50, b=65, t=90)
-                  )
-fig.show()
+# And transform the old column name in something numeric
+df['X'] = pd.Categorical(df['X'])
+df['X'] = df['X'].cat.codes
+
+# Make the plot
+fig = plt.figure()
+ax = fig.gca(projection='3d')
+ax.set_xlabel("X coordinate (cm)")
+ax.set_ylabel("Y coordinate (cm)")
+ax.set_zlabel("Voltage (V)")
+ax.set_title("Electric Potential Scalar Field")
+ax.plot_trisurf(df['Y'], df['X'], df['Z'], cmap=plt.cm.plasma, linewidth=0.2)
+# plt.show()
+
+# to Add a color bar which maps values to colors.
+surf = ax.plot_trisurf(df['Y'], df['X'], df['Z'],
+                       cmap=plt.cm.plasma, linewidth=0.2)
+fig.colorbar(surf, shrink=0.5, aspect=5)
+plt.show()
+
+
+# Rotate it
+ax.view_init(30, 45)
+plt.show()
+
+# Other palette
+ax.plot_trisurf(df['Y'], df['X'], df['Z'], cmap=plt.cm.jet, linewidth=0.01)
+plt.show()
